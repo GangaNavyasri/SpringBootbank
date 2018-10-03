@@ -3,7 +3,10 @@ package com.capgemini.icicibank.repository.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.jasper.tagplugins.jstl.core.Catch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -19,17 +22,32 @@ public class BankAccountRepositoryImpl implements BankAccountRepository {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public double getBalance(long accountId) {
+	public double getBalance(long accountId) throws DataAccessException {
+		try {
+		
 		double balance = jdbcTemplate.queryForObject("SELECT balance FROM bankaccounts Where account_id=?", new Object[] {accountId},Double.class);
 		return balance;
+		}
+		catch(DataAccessException exception)
+		{
+			exception.initCause(new EmptyResultDataAccessException("balance not displayed", 1));
+			throw exception;
+		}
 	}
 
 	@Override
-	public double updateBalance(long accountId, double newBalance) {
+	public double updateBalance(long accountId, double newBalance) throws DataAccessException{
+		try {
 		double balance =jdbcTemplate.update("update bankaccounts set balance=? where account_id=?", new Object[] {newBalance,accountId});
 		return balance;
 	}
 	
+	catch(DataAccessException exception)
+	{
+		exception.initCause(new EmptyResultDataAccessException("Balance not updated", 1));
+		throw exception;
+	}
+	}
 	
 	
 	/*class BankAccountRowMapper implements RowMapper<BankAccount>{

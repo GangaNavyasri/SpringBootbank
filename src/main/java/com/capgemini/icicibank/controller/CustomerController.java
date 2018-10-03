@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.capgemini.icicibank.entities.BankAccount;
 import com.capgemini.icicibank.entities.Customer;
+import com.capgemini.icicibank.exceptions.InvalidDataException;
 import com.capgemini.icicibank.service.CustomerService;
 
 @Controller
+@SessionAttributes("customer")
 public class CustomerController {
 
 	@Autowired
@@ -52,7 +55,7 @@ public class CustomerController {
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public String updateCustomer(Model model, @RequestParam String custName, @RequestParam String address,
-			@RequestParam String email, HttpSession session, HttpServletRequest request) {
+			@RequestParam String email, HttpSession session, HttpServletRequest request) throws InvalidDataException {
 
 		Customer customer = (Customer) session.getAttribute("customer");
 		session = request.getSession();

@@ -36,7 +36,7 @@ public class BankAccountController {
 		BankAccount account;
 		session= request.getSession();
 		Customer customer=(Customer) session.getAttribute("customer");
-		System.out.println("balancd"+customer);
+		System.out.println("balance"+customer);
 	   double balance= bankaccountService.getBalance(customer.getAccount().getAccountId());
 	   System.out.println(balance);
 		model.addAttribute("balance",balance);

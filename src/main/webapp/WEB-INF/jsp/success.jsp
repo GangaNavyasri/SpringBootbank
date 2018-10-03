@@ -13,7 +13,9 @@
 Success
 </c:if>
  <c:if test="${requestScope.success != true}"> 
-Failed 
+Failed: ${requestScope.success}
+
+
 </c:if>  
 </body>
 </html>
